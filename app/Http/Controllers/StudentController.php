@@ -35,7 +35,11 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $student = $this->student->find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        return $student;
     }
 
     /**
@@ -43,7 +47,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $student = $this->student->find($id);
+        if (!$student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        $student->update($request->all());
+        return $student;
     }
 
     /**

@@ -48,7 +48,7 @@
                             <td>{{ student.address }}</td>
                             <td>{{ student.phone }}</td>
                             <td>
-                                <button type="button" class="btn btn-primary">Edit</button>
+                                <button type="button" @click="edit(student)" class="btn btn-primary">Edit</button>
                                 <button type="button" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
@@ -102,6 +102,8 @@ export default {
         save() {
             if (this.student.id == '') {
                 this.SaveData();
+            }else{
+                this.UpdateData();
             }
         },
 
@@ -117,6 +119,24 @@ export default {
                 })
 
         },
-    },
+
+        edit(student){
+            this.student = student;
+        },
+
+        UpdateData() {
+            var editRecord = 'http://127.0.0.1:8000/api/students/' + this.student.id;
+            axios.put(editRecord, this.student)
+                .then(({ data }) => {
+                    this.student.name = '',
+                    this.student.address = '',
+                    this.student.phone = '',
+                    this.student.id = ''
+                    alert('atualizando...');
+                    this.StudentLoad();
+                });
+        },
+
+    }
 }
 </script>

@@ -6,24 +6,24 @@
                     Add Registro
                 </div>
                 <div class="card-body">
-                    <form @submit.prevent="save" >
+                    <form @submit.prevent="save">
 
                         <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" placeholder="name">
+                            <label>Name</label>
+                            <input type="text" v-model="student.name" class="form-control" placeholder="name">
                         </div>
 
                         <div class="form-group">
-                        <label>Address</label>
-                        <input type="text" class="form-control" placeholder="address">
+                            <label>Address</label>
+                            <input type="text" v-model="student.address" class="form-control" placeholder="address">
                         </div>
 
                         <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" class="form-control" placeholder="phone">
+                            <label>Phone</label>
+                            <input type="text" v-model="student.phone" class="form-control" placeholder="phone">
                         </div>
 
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
                 </div>
             </div><!--fim row-->
@@ -43,10 +43,10 @@
 
                     <tbody>
                         <tr v-for="student in result" v-bind:key="student.id">
-                            <td>{{student.id}}</td>
-                            <td>{{student.name}}</td>
-                            <td>{{student.address}}</td>
-                            <td>{{student.phone}}</td>
+                            <td>{{ student.id }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.address }}</td>
+                            <td>{{ student.phone }}</td>
                             <td>
                                 <button type="button" class="btn btn-primary">Edit</button>
                                 <button type="button" class="btn btn-danger">Delete</button>
@@ -64,11 +64,11 @@
 <script>
 import axios from 'axios';
 
-export default{
+export default {
 
     name: 'Student',
-    data(){
-        return{
+    data() {
+        return {
             result: {},
             student: {
                 id: '',
@@ -79,27 +79,44 @@ export default{
         }
     },
 
-    created(){
+    created() {
         this.StudentLoad();
     },
 
-    mounted(){
+    mounted() {
         console.log('mouted() called...');
     },
 
-    methods:{
-        StudentLoad(){
+    methods: {
+        StudentLoad() {
 
             axios
-      .get('http://127.0.0.1:8000/api/students/')
-      .then(({data}) =>{
-        console.log(data);
-        this.result = data;
-    } )
+                .get('http://127.0.0.1:8000/api/students/')
+                .then(({ data }) => {
+                    console.log(data);
+                    this.result = data;
+                })
 
         },
-    }
 
+        save() {
+            if (this.student.id == '') {
+                this.SaveData();
+            }
+        },
 
+        SaveData() {
+
+            axios.post('http://127.0.0.1:8000/api/students/', this.student)
+                .then(({ data }) => {
+                    this.StudentLoad();
+                    this.student.name = '',
+                        this.student.address = '',
+                        this.student.phone = '',
+                        this.student.id = ''
+                })
+
+        },
+    },
 }
 </script>

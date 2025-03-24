@@ -26,7 +26,8 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->student->create($request->all());
+        return response()->json(['message' => 'Student created successfully'], 201);
     }
 
     /**
